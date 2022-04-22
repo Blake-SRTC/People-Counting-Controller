@@ -151,5 +151,3 @@ if Timer:
 
 Blake
 =======
-# People-Counting-in-Real-Time
->>>>>>> 2fbe45287ecea65e7b0d130f483de9d1c67554e8
