@@ -5,7 +5,7 @@
 # e.g., 'email@gmail.com'
 MAIL = ''
 # Enter the ip camera url (e.g., url = 'http://191.138.0.100:8040/video')
-url = ''
+url = 'rtsp://192.168.100.226:554/live.sdp'
 
 # ON/OFF for mail feature. Enter True to turn on the email alert feature.
 ALERT = False

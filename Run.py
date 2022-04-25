@@ -9,6 +9,7 @@ import numpy as np
 import argparse, imutils
 import time, dlib, cv2, datetime
 from itertools import zip_longest
+from mylib.api import sendPost
 
 t0 = time.time()
 
@@ -75,6 +76,10 @@ def run():
 	x = []
 	empty=[]
 	empty1=[]
+
+	# Control de ciclos de reportes.............................................
+	e1 = np.size(empty)
+	e2 = np.size(empty1)
 
 	# start the frames per second throughput estimator
 	fps = FPS().start()
@@ -282,16 +287,29 @@ def run():
 			text = "{}: {}".format(k, v)
 			cv2.putText(frame, text, (265, H - ((i * 20) + 60)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
-		# Initiate a simple log to save data at end of the day
-		if config.Log:
-			datetimee = [datetime.datetime.now()]
-			d = [datetimee, empty1, empty, x]
-			export_data = zip_longest(*d, fillvalue = '')
+		# Controla de escrituras csv y post
+		if np.size(empty) > e1 or np.size(empty1) > e2:
+			e1 = np.size(empty)
+			e2 = np.size(empty1)
+			# Initiate a simple log to save data at end of the day
+			if config.Log:
+				datetimee = [datetime.datetime.now()]
+				d = [datetimee, empty1, empty, x]
+				export_data = zip_longest(*d, fillvalue = '')
 
-			with open('Log.csv', 'w', newline='') as myfile:
-				wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-				wr.writerow(("End Time", "In", "Out", "Total Inside"))
-				wr.writerows(export_data)
+				with open('Log.csv', 'w', newline='') as myfile:
+					wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+					wr.writerow(("End Time", "In", "Out", "Total Inside"))
+					wr.writerows(export_data)
+			# Enviando data a servidor
+			print("Escritura realizada")
+			print("Entrada: {}".format(totalDown))
+			print("Salida: {}".format(totalUp))
+			print("Total: {}".format(x))
+			total = x[0]
+			# Enviado a servidor
+			respuesta_server = sendPost(totalDown, totalUp, total)
+			print("Servidor responde: {} ".format(respuesta_server))
 				
 		# check to see if we should write the frame to disk
 		if writer is not None:
