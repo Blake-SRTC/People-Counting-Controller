@@ -301,12 +301,14 @@ def run():
 					wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
 					wr.writerow(("End Time", "In", "Out", "Total Inside"))
 					wr.writerows(export_data)
+
 			# Enviando data a servidor
 			print("Escritura realizada")
 			print("Entrada: {}".format(totalDown))
 			print("Salida: {}".format(totalUp))
-			print("Total: {}".format(x))
 			total = x[0]
+			print("Total: {}".format(total))
+			
 			# Enviado a servidor
 			respuesta_server = sendPost(totalDown, totalUp, total)
 			print("Servidor responde: {} ".format(respuesta_server))
