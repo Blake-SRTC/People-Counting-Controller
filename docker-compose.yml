@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+    ai_controller:
+        container_name: ai_controller
+        restart: always
+        build: .
+        ports: 
+            - "6000:6000"
+        environment:
+            - TZ=America/La_Paz
